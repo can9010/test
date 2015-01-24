@@ -1,0 +1,92 @@
+ssh-keygen -t rsa -C "13241153187@163.com"
+GitHub邮箱 : 该命令后面的邮箱就是GitHub的注册邮箱;
+路径选择 : 使用该命令之后, 会出现提示选择ssh-key生成路径, 这里直接点回车默认即可, 生成的ssh-key在默认路径中;
+密码确认 : 这里我们不使用密码进行登录, 用密码太麻烦
+
+进入生成的ssh目录 : C:\Documents and Settings\Administrator\.ssh （或者 C:\Users\自己电脑用户名\.ssh）中, 使用记事本打开 id_rsa.pub 文件, 将该文件中的内容复制;
+
+进入GitHub网站 : 登录GitHub, 选择Account Setting 用户设置：
+
+ssh -T git@github.com验证时可能让你输入YES。
+
+成功提示 : 如果出现Hi han1202012! You’ve successfully authenticated, but GitHub does not provide shell access. 就说明配置成功, 可以连接上GitHub;
+
+配置本地用户和邮箱
+用户名邮箱作用 : 我们需要设置一个用户名 和 邮箱, 这是用来上传本地仓库到GitHub中, 在GitHub中显示代码上传者;
+使用命令 :
+
+git config --global user.name "can9010" //设置用户名 
+git config --global user.email "can9010@163.com" //设置邮箱
+
+到此Git客户端已安装及GitHub配置完成，现在可以从GitHub传输代码了。
+
+设置Git本地项目开发库默认路径
+如果设置了，就不用每次打开Git再cd打开目录了。方法：右键git快捷图标（名叫：Git Bash），找到快捷方式-起始位置，把你的项目地址放在这里就可以了。
+
+当对工作区修改（或新增）的文件执行 “git add” 命令时，暂存区的目录树被更新，同时工作区修改（或新增）的文件内容被写入到对象库中的一个新的对象中，而该对象的ID 被记录在暂存区的文件索引中。
+当执行提交操作（git commit）时，暂存区的目录树写到版本库（对象库）中，master 分支会做相应的更新。即 master 指向的目录树就是提交时暂存区的目录树。
+当执行 “git reset HEAD” 命令时，暂存区的目录树会被重写，被 master 分支指向的目录树所替换，但是工作区不受影响。
+当执行 “git rm --cached <file>” 命令时，会直接从暂存区删除文件，工作区则不做出改变。
+当执行 “git checkout .” 或者 “git checkout — <file>” 命令时，会用暂存区全部或指定的文件替换工作区的文件。这个操作很危险，会清除工作区中未添加到暂存区的改动。
+当执行 “git checkout HEAD .” 或者 “git checkout HEAD <file>” 命令时，会用 HEAD 指向的 master 分支中的全部或者部分文件替换暂存区和以及工作区中的文件。这个命令也是极具危险性的，因为不但会清除工作区中未提交的改动，也会清除暂存区中未提交的改 动。
+
+
+$ git rm --cached x.txt跟踪取消的含义是，把文件从git中拿出来，不再进行版本跟踪，但保留工作区的文件
+如果强行删除，则需要加 -f 注意：git rm -f --cached a.txt  与 git rm -f a.txt 之间的区别： 前者保留工作区的文件，后者是全部删除。
+
+git rebase有点类似git merge，但是两者又有不同，打个比方，你有两个抽屉A和B，里面都装了衣服，现在想把B中的衣服放到A中，git merge是那种横冲直撞型的，拿起B就倒入A里面，如果满了（冲突）再一并整理；而git rebase就很持家了，它会一件一件的从B往A中加，会根据一开始放入的时间顺序的来加，如果满了你可以处理这一件，你可以继续加，或者跳过这一件，又 或者不加了，把A还原。所以merge适合那种比较琐碎的，简单的合并，系统级的合并还是用rebase吧。
+
+专业的区别请移步到这里合并和衍合
+
+   # 合并b
+git rebase b
+
+# 处理完冲突继续合并
+git rebase –continue
+
+# 跳过
+git rebase –skip
+
+# 取消合并
+git rebase –abort
+
+
+
+打标签的操作发生在我们commit修改到本地仓库之后。完整的例子
+
+git add .
+
+git commit -m “fixed some bugs”
+
+git tag -a 0.1.3 -m “Release version 0.1.3″
+
+分享提交标签到远程服务器上
+
+git push origin master
+
+git push origin –tags
+
+–tags参数表示提交所有tag至服务器端，普通的git push origin master操作不会推送标签到服务器端。
+
+删除标签的命令
+
+git tag -d 0.1.3
+
+删除远端服务器的标签
+
+git push origin :refs/tags/0.1.3
+
+在 git 中有两种最主要的标签–轻量级标签（lightweight）和带注释的标签（annotated）
+标签操作：
+查看所有标签：                               $ git tag
+注意：标签显示的顺序无太多含义。
+查看特定标签：                               $ git tag -l 'v1.4.2.*'
+打新标签：                                   $ git tag -a v1.4 -m 'my version 1.4'
+显示某个标签：                               $ git show v1.4
+签署标签：                                   $ git tag -s v1.5 -m 'my signed 1.5 tag'
+轻量级标签：                                 $ git tag v1.6
+验证标签：                                   $ git tag -v v1.4.2.1
+后期加注标签：                               $ git log --pretty=oneline
+                                             $ git tag -a v1.2 9fceb02
+分享（推送）标签：                           $ git push origin v1.5
+分享（推送）所有标签：                       $ git push origin --tags
