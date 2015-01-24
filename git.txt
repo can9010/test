@@ -1,0 +1,25 @@
+ssh-keygen -t rsa -C "13241153187@163.com"
+GitHub邮箱 : 该命令后面的邮箱就是GitHub的注册邮箱;
+路径选择 : 使用该命令之后, 会出现提示选择ssh-key生成路径, 这里直接点回车默认即可, 生成的ssh-key在默认路径中;
+密码确认 : 这里我们不使用密码进行登录, 用密码太麻烦
+
+进入生成的ssh目录 : C:\Documents and Settings\Administrator\.ssh （或者 C:\Users\自己电脑用户名\.ssh）中, 使用记事本打开 id_rsa.pub 文件, 将该文件中的内容复制;
+
+进入GitHub网站 : 登录GitHub, 选择Account Setting 用户设置：
+
+ssh -T git@github.com验证时可能让你输入YES。
+
+成功提示 : 如果出现Hi han1202012! You’ve successfully authenticated, but GitHub does not provide shell access. 就说明配置成功, 可以连接上GitHub;
+
+配置本地用户和邮箱
+用户名邮箱作用 : 我们需要设置一个用户名 和 邮箱, 这是用来上传本地仓库到GitHub中, 在GitHub中显示代码上传者;
+使用命令 :
+
+git config --global user.name "can9010" //设置用户名 
+git config --global user.email "can9010@163.com" //设置邮箱
+
+到此Git客户端已安装及GitHub配置完成，现在可以从GitHub传输代码了。
+
+设置Git本地项目开发库默认路径
+如果设置了，就不用每次打开Git再cd打开目录了。方法：右键git快捷图标（名叫：Git Bash），找到快捷方式-起始位置，把你的项目地址放在这里就可以了。
+
