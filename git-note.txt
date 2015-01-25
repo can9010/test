@@ -1,4 +1,4 @@
-ssh-keygen -t rsa -C "13241153187@163.com"
+ssh-keygen -t rsa -C "xx@163.com"
 GitHub邮箱 : 该命令后面的邮箱就是GitHub的注册邮箱;
 路径选择 : 使用该命令之后, 会出现提示选择ssh-key生成路径, 这里直接点回车默认即可, 生成的ssh-key在默认路径中;
 密码确认 : 这里我们不使用密码进行登录, 用密码太麻烦
@@ -9,14 +9,14 @@ GitHub邮箱 : 该命令后面的邮箱就是GitHub的注册邮箱;
 
 ssh -T git@github.com验证时可能让你输入YES。
 
-成功提示 : 如果出现Hi han1202012! You’ve successfully authenticated, but GitHub does not provide shell access. 就说明配置成功, 可以连接上GitHub;
+成功提示 : 如果出现Hi xx! You’ve successfully authenticated, but GitHub does not provide shell access. 就说明配置成功, 可以连接上GitHub;
 
 配置本地用户和邮箱
 用户名邮箱作用 : 我们需要设置一个用户名 和 邮箱, 这是用来上传本地仓库到GitHub中, 在GitHub中显示代码上传者;
 使用命令 :
 
-git config --global user.name "can9010" //设置用户名 
-git config --global user.email "can9010@163.com" //设置邮箱
+git config --global user.name "xx" //设置用户名 
+git config --global user.email "xx@xx" //设置邮箱
 
 到此Git客户端已安装及GitHub配置完成，现在可以从GitHub传输代码了。
 
@@ -28,16 +28,18 @@ git config --global user.email "can9010@163.com" //设置邮箱
 当执行 “git reset HEAD” 命令时，暂存区的目录树会被重写，被 master 分支指向的目录树所替换，但是工作区不受影响。
 当执行 “git rm --cached <file>” 命令时，会直接从暂存区删除文件，工作区则不做出改变。
 当执行 “git checkout .” 或者 “git checkout — <file>” 命令时，会用暂存区全部或指定的文件替换工作区的文件。这个操作很危险，会清除工作区中未添加到暂存区的改动。
-当执行 “git checkout HEAD .” 或者 “git checkout HEAD <file>” 命令时，会用 HEAD 指向的 master 分支中的全部或者部分文件替换暂存区和以及工作区中的文件。这个命令也是极具危险性的，因为不但会清除工作区中未提交的改动，也会清除暂存区中未提交的改 动。
+当执行 “git checkout HEAD .” 或者 “git checkout HEAD <file>” 命令时，会用 HEAD 指向的 master 分支中的全部或者部分文件替换暂存区和以及工作区中的文件。这个命令也是极具危险性的
+，因为不但会清除工作区中未提交的改动，也会清除暂存区中未提交的改 动。
 
 
 $ git rm --cached x.txt跟踪取消的含义是，把文件从git中拿出来，不再进行版本跟踪，但保留工作区的文件
 如果强行删除，则需要加 -f 注意：git rm -f --cached a.txt  与 git rm -f a.txt 之间的区别： 前者保留工作区的文件，后者是全部删除。
 
-git rebase有点类似git merge，但是两者又有不同，打个比方，你有两个抽屉A和B，里面都装了衣服，现在想把B中的衣服放到A中，git merge是那种横冲直撞型的，拿起B就倒入A里面，如果满了（冲突）再一并整理；而git rebase就很持家了，它会一件一件的从B往A中加，会根据一开始放入的时间顺序的来加，如果满了你可以处理这一件，你可以继续加，或者跳过这一件，又 或者不加了，把A还原。所以merge适合那种比较琐碎的，简单的合并，系统级的合并还是用rebase吧。
+git rebase有点类似git merge，但是两者又有不同，打个比方，你有两个抽屉A和B，里面都装了衣服，现在想把B中的衣服放到A中，git merge是那种横冲直撞型的，拿起B就倒入A里面，
+如果满了（冲突）再一并整理；而git rebase就很持家了，它会一件一件的从B往A中加，会根据一开始放入的时间顺序的来加，如果满了你可以处理这一件，你可以继续加，
+或者跳过这一件，又 或者不加了，把A还原。所以merge适合那种比较琐碎的，简单的合并，系统级的合并还是用rebase吧。
 
 专业的区别请移步到这里合并和衍合
-
    # 合并b
 git rebase b
 
@@ -49,6 +51,35 @@ git rebase –skip
 
 # 取消合并
 git rebase –abort
+
+
+git revert 和 git reset的区别 
+1. git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。 
+2. 在回滚这一操作上看，效果差不多。但是在日后继续merge以前的老版本时有区别。因为git revert是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是git reset是之间把某些commit在某个branch上删除，因而和老的branch再次merge时，这些被回滚的commit应该还会被引入。 
+3. git reset 是把HEAD向后移动了一下，而git revert是HEAD继续前进，只是新的commit的内容和要revert的内容正好相反，能够抵消要被revert的内容。
+
+git revert 是撤销某次操作，此次操作之前的commit都会被保留
+git reset 是撤销某次提交，但是此次之后的修改都会被退回到暂存区
+具体一个例子，假设有三个commit， git st:
+commit3: add test3.c
+commit2: add test2.c
+commit1: add test1.c
+当执行git revert HEAD~1时， commit2被撤销了
+git log可以看到：
+commit1：add test1.c
+commit3：add test3.c
+git status 没有任何变化
+如果换做执行git reset --soft(默认) HEAD~1后，运行git log
+commit2: add test2.c
+commit1: add test1.c
+运行git status， 则test3.c处于暂存区，准备提交。
+如果换做执行git reset --hard HEAD~1后，
+显示：HEAD is now at commit2，运行git log
+commit2: add test2.c
+commit1: add test1.c
+运行git st， 没有任何变化
+另外：
+git revert <commit log string>是撤消该commit，作为一个新的commit。
 
 
 
@@ -64,7 +95,7 @@ git tag -a 0.1.3 -m “Release version 0.1.3″
 
 git push origin master
 
-git push origin –tags
+git push origin --tags
 
 –tags参数表示提交所有tag至服务器端，普通的git push origin master操作不会推送标签到服务器端。
 
